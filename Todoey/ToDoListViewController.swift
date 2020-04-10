@@ -11,10 +11,13 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var itemArray = ["Exercise", "Eat Breakfast", "Watch a film"]
+    var defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     // MARK: - TableView Datasource Methods
@@ -60,8 +63,10 @@ class ToDoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (alertAction) in
             print("Item added successfully")
-            if !textField.text!.isEmpty{
-                self.itemArray.append(textField.text!)
+            let theText = textField.text!
+            if !theText.isEmpty{
+                self.itemArray.append(theText)
+                self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             } else {
                 alert.title = "Please Write Something to add item"
                 self.present(alert, animated: true, completion: nil)
