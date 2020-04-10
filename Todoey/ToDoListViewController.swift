@@ -10,14 +10,14 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
     
-    let itemArray = ["Exercise", "Eat Breakfast", "Watch a film"]
+    var itemArray = ["Exercise", "Eat Breakfast", "Watch a film"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
       
     }
     
-    //Mark - TableView Datasource Methods
+    // MARK: - TableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
@@ -33,7 +33,7 @@ class ToDoListViewController: UITableViewController {
     
     
     
-    //Mark - Table View Delegate Methods
+    // MARK: - Table View Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
 
@@ -48,10 +48,36 @@ class ToDoListViewController: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
     }
     
+    // MARK: - Add New Items
     
-
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default) { (alertAction) in
+            print("Item added successfully")
+            if !textField.text!.isEmpty{
+                self.itemArray.append(textField.text!)
+            } else {
+                alert.title = "Please Write Something to add item"
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            self.tableView.reloadData()
+        }
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+        }
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
 }
 
